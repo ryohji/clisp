@@ -1,49 +1,52 @@
 #include <iostream>
 
-struct util {
-  explicit util(struct object *o = 0) : c(new unsigned(1)), o(o) {}
-  util(const util& u) : c(u.c), o(u.o) { ++*c; }
-  ~util() { detach(); }
-  util& operator=(const util& u);
+template <typename TYPE>
+struct sp {
+  explicit sp(TYPE *o = 0) : c(new unsigned(1)), o(o) {}
+  sp(const sp<TYPE>& u) : c(u.c), o(u.o) { ++*c; }
+  ~sp() { detach(); }
+  sp<TYPE>& operator=(const sp<TYPE>& u);
 private:
   void detach();
   unsigned *c;
-  struct object *o;
+  TYPE *o;
 };
 
-struct object {
-  object() { std::cout << "hello! (" << this << ")" << std::endl; }
-  virtual ~object() { std::cout << "i'm dead (" << this << ")" << std::endl; }
-};
-
-inline util& util::operator=(const util& u) {
+template<typename TYPE>
+inline sp<TYPE>& sp<TYPE>::operator=(const sp<TYPE>& u) {
   ++*u.c;
   detach();
   o = u.o;
   c = u.c;
 }
 
-inline void util::detach() {
+template<typename TYPE>
+inline void sp<TYPE>::detach() {
   if (0 == --*c) {
     delete c;
     delete o;
   }
 }
 
+struct object {
+  object() { std::cout << "hello! (" << this << ")" << std::endl; }
+  virtual ~object() { std::cout << "i'm dead (" << this << ")" << std::endl; }
+};
+
 int main() {
   { // test ctor
-    util u(new object);
+    sp<object> u(new object);
   }
   { // test copy ctor
-    util u(new object);
-    util c = u;
+    sp<object> u(new object);
+    sp<object> c = u;
   }
   { // test assignment
-    util u(new object), a;
+    sp<object> u(new object), a;
     a = u;
   }
   { // test self assignment
-    util u(new object);
+    sp<object> u(new object);
     u = u;
   }
   return 0;
