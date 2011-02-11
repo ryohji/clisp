@@ -1,11 +1,13 @@
 LDFLAGS=-lstdc++
 
-clisp: expression.o clisp.o
+clisp: expression.o number.o clisp.o
 
 .PHONY: clean
 clean:
 	$(RM) clisp *.o
 
+clisp.o: sp.h expression.h number.h
+
 expression.o: expression.h
 
-clisp.o: expression.o sp.h
+number.o: number.h

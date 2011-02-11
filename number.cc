@@ -1,0 +1,7 @@
+#include "number.h"
+#include <sstream>
+
+std::string clisp::number::str() const {
+  std::ostringstream os; os << value(); return os.str();
+}
+

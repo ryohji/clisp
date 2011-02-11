@@ -1,4 +1,5 @@
 #include "expression.h"
+#include "number.h"
 
 #include <algorithm>
 #include <iostream>
@@ -7,17 +8,6 @@
 #include <numeric>
 
 namespace clisp {
-
-  struct number : public expression {
-    number() : value_(0) {}
-    explicit number(double value) : value_(value) {}
-    virtual double value() const { return value_; }
-    virtual std::string str() const {
-      std::ostringstream os; os << value(); return os.str();
-    }
-  private:
-    double value_;
-  };
 
   namespace application {
     struct print : public expression {
