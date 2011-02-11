@@ -3,7 +3,7 @@
 
 template <typename TYPE>
 struct sp {
-  explicit sp(TYPE *o = 0) : c(new unsigned(1)), o(o) {}
+  sp(TYPE *o = 0) : c(new unsigned(1)), o(o) {}
   sp(const sp<TYPE>& u) : c(u.c), o(u.o) { ++*c; }
   ~sp() { detach(); }
   sp<TYPE>& operator=(const sp<TYPE>& u);

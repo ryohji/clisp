@@ -1,38 +1,11 @@
-#include "sp.h"
+#include "expression.h"
 
-#include <stdexcept>
-#include <list>
-#include <string>
 #include <algorithm>
 #include <iostream>
 #include <sstream>
 #include <numeric>
 
 namespace clisp {
-
-  struct expression {
-    expression();
-    virtual ~expression();
-    virtual double value() const;
-    virtual std::string str() const;
-    virtual sp<expression> apply(const std::list<sp<expression> > &es) const;
-  };
-
-  expression::expression() { std::cout << "created (" << this << ")" << std::endl; }
-
-  expression::~expression() { std::cout << "destroyed (" << this << ")" <<  std::endl; }
-
-  double expression::value() const {
-    throw std::runtime_error("expression can not convert to value.");
-  }
-
-  std::string expression::str() const {
-    return "expression";
-  }
-
-  struct sp<expression> expression::apply(const std::list<sp<expression> > &es) const {
-    throw std::runtime_error("expression can not be applicable.");
-  }
 
   struct number : public expression {
     number() : value_(0) {}
