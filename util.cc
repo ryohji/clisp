@@ -6,6 +6,8 @@ struct sp {
   sp(const sp<TYPE>& u) : c(u.c), o(u.o) { ++*c; }
   ~sp() { detach(); }
   sp<TYPE>& operator=(const sp<TYPE>& u);
+  const TYPE* operator->() const { return o; }
+  TYPE* operator->();
 private:
   void detach();
   unsigned *c;
@@ -28,9 +30,16 @@ inline void sp<TYPE>::detach() {
   }
 }
 
+template<typename TYPE>
+inline TYPE* sp<TYPE>::operator->() {
+  return const_cast<TYPE*>(static_cast<const sp<TYPE>&>(*this).operator->());
+}
+
 struct object {
   object() { std::cout << "hello! (" << this << ")" << std::endl; }
   virtual ~object() { std::cout << "i'm dead (" << this << ")" << std::endl; }
+  void hello() const { std::cout << "hello" << std::endl; }
+  void mutable_hello() { hello(); }
 };
 
 int main() {
@@ -48,6 +57,11 @@ int main() {
   { // test self assignment
     sp<object> u(new object);
     u = u;
+  }
+  { // test cast operator
+    sp<object> u(new object);
+    u->hello();
+    u->mutable_hello();
   }
   return 0;
 }
