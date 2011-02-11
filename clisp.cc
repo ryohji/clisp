@@ -1,3 +1,5 @@
+#include "sp.h"
+
 #include <stdexcept>
 #include <list>
 #include <string>
@@ -7,13 +9,16 @@
 #include <numeric>
 
 struct expression {
+  expression();
   virtual ~expression();
   virtual double value() const;
   virtual std::string str() const;
-  virtual struct expression* apply(const std::list<expression*> &es) const;
+  virtual sp<expression> apply(const std::list<sp<expression> > &es) const;
 };
 
-expression::~expression() {}
+expression::expression() { std::cout << "created (" << this << ")" << std::endl; }
+
+expression::~expression() { std::cout << "destroyed (" << this << ")" <<  std::endl; }
 
 double expression::value() const {
   throw std::runtime_error("expression can not convert to value.");
@@ -23,7 +28,7 @@ std::string expression::str() const {
   return "expression";
 }
 
-struct expression* expression::apply(const std::list<expression*> &es) const {
+struct sp<expression> expression::apply(const std::list<sp<expression> > &es) const {
   throw std::runtime_error("expression can not be applicable.");
 }
 
@@ -42,34 +47,32 @@ namespace clisp {
 
 namespace application {
   struct print : public expression {
-    virtual struct expression* apply(const std::list<expression*> &es) const {
+    virtual sp<expression> apply(const std::list<sp<expression> > &es) const {
       std::for_each(es.begin(), es.end(), print_);
       return 0;
     }
-    static void print_(const expression* e) {
+    static void print_(const sp<expression> e) {
       std::cout << e->str() << std::endl;
     }
   };
   struct add : public expression {
-    virtual struct expression* apply(const std::list<expression*> &es) const {
-      std::list<expression*>::const_iterator it = es.begin();
+    virtual sp<expression> apply(const std::list<sp<expression> > &es) const {
+      std::list<sp<expression> >::const_iterator it = es.begin();
       const double init = (*it)->value();
       return new clisp::number(std::accumulate(++it, es.end(), init, accum_));
     }
-    static double accum_(double v, const expression* e) {
+    static double accum_(double v, const sp<expression> e) {
       return v + e->value();
     }
   };
 }
 
 int main() {
-  clisp::number n0(0), n1(1), n2(2);
-  std::list<expression*> es;
-  es.push_back(&n0);
-  es.push_back(&n1);
-  es.push_back(&n2);
-  expression *e = application::add().apply(es);
+  std::list<sp<expression> > es;
+  es.push_back(new clisp::number(0.0));
+  es.push_back(new clisp::number(1.0));
+  es.push_back(new clisp::number(2.0));
+  sp<expression> e = application::add().apply(es);
   std::cout << e->str() << std::endl;
-  delete e;
   return 0;
 }
