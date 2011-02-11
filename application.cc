@@ -18,9 +18,19 @@ namespace {
 
 }
 
+
+std::string clisp::application::print::str() const {
+  return "print :: aplication";
+}
+
 clisp::expression_t clisp::application::print::apply(const list &es) const {
   std::for_each(es.begin(), es.end(), print_);
   return 0;
+}
+
+
+std::string clisp::application::add::str() const {
+  return "add :: application";
 }
 
 clisp::expression_t clisp::application::add::apply(const list &es) const {
