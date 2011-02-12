@@ -10,6 +10,7 @@ NS_CLISP_BEGIN
 struct symbol : public expression {
   explicit symbol(const std::string &symb);
   virtual std::string str() const;
+  virtual expression_t eval(environment_t env) const;
 private:
   symbol();
   const std::string s_;

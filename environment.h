@@ -2,6 +2,7 @@
 #define ENVIRONMENT_H_
 
 #include "expression.h"
+#include <string>
 
 NS_CLISP_BEGIN
 
@@ -12,8 +13,8 @@ struct environment {
 
   ~environment();
 
-  /* find matching expression to expr as symbol. if not found, throw runtime_error. */
-  expression_t find(const expression_t &expr) const;
+  /* find matching expression to symbol. if not found, throw runtime_error. */
+  expression_t find(const std::string &symbol) const;
 
   void add(const expression_t &symbol, const expression_t &expr);
 

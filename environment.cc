@@ -12,13 +12,13 @@ struct environment::impl : std::list<pair_t> {};
 
 namespace {
   struct finder {
-    explicit finder(const expression_t expr) : symbol(expr->str()) {}
+    explicit finder(const std::string& expr) : symbol(expr) {}
     bool operator() (const pair_t &pair) const {
       return symbol == pair.first->str();
     }
   private:
     finder& operator= (const finder&);
-    const std::string symbol;
+    const std::string& symbol;
   };
 }
 
@@ -29,9 +29,9 @@ environment::environment(const environment &env) : o (new impl(*env.o)) {}
 
 environment::~environment() { delete o; }
 
-expression_t environment::find(const expression_t &expr) const
+expression_t environment::find(const std::string &symbol) const
 {
-  const impl::const_iterator it = std::find_if(o->begin(), o->end(), finder(expr));
+  const impl::const_iterator it = std::find_if(o->begin(), o->end(), finder(symbol));
   if (o->end() == it)
     throw std::runtime_error("symbol not found in the environment");
   return it->second;
