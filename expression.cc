@@ -1,5 +1,4 @@
 #include "expression.h"
-#include "environment.h"
 
 #include <stdexcept>
 
