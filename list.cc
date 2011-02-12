@@ -1,4 +1,5 @@
 #include "list.h"
+#include "environment.h"
 #include <stdexcept>
 #include <sstream>
 
@@ -22,11 +23,29 @@ std::string list::str() const {
 }
 
 expression_t list::apply(const list &es) const {
-  return 0;
+  throw std::runtime_error("list can not be applicable");
+}
+
+namespace {
+  list* evaluate(const list &l, environment_t env) {
+    list* es = new list;
+    list::const_iterator it = l.begin();
+    while (l.end() != it)
+      es->push_back((*it++)->eval(env));
+    return es;
+  }
 }
 
 expression_t list::eval(environment_t env) const {
-  return 0;
+  if (empty()) {
+    throw std::runtime_error("() can not be evaluatable");
+  } else {
+    list* es = evaluate(*this, env);
+    expression_t lst(es); // for auto deletion, when poping out this scope
+    expression_t app = es->front();
+    es->pop_front();
+    return app->apply(*es);
+  }
 }
 
 NS_CLISP_END

@@ -14,7 +14,7 @@ number.o: expression.h number.h
 
 symbol.o: expression.h environment.h symbol.h
 
-list.o: expression.h list.h
+list.o: expression.h environment.h list.h
 
 application.o: expression.h number.h list.h application.h
 
