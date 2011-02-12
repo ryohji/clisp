@@ -17,7 +17,8 @@ int main() {
   clisp::environment_t env(new clisp::environment);
   env->add(new clisp::symbol("+"), new clisp::application::add);
   env->add(new clisp::symbol("pi"), new clisp::number(3.14));
-  e = env->find("pi");
-  std::cout << e->str() << std::endl;
+  std::cout << clisp::expression_t(new clisp::symbol("pi"))->eval(env)->str() << std::endl;
+  e->eval(env);
+
   return 0;
 }
