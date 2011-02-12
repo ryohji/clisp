@@ -34,6 +34,9 @@ namespace {
       es->push_back((*it++)->eval(env));
     return es;
   }
+
+  template<typename T> inline T pop_front(std::list<T> &l)
+  { T value = l.front(); l.pop_front(); return value; }
 }
 
 expression_t list::eval(environment_t env) const {
@@ -42,8 +45,7 @@ expression_t list::eval(environment_t env) const {
   } else {
     list* es = evaluate(*this, env);
     expression_t lst(es); // for auto deletion, when poping out this scope
-    expression_t app = es->front();
-    es->pop_front();
+    expression_t app = clisp::pop_front(*es);
     return app->apply(*es);
   }
 }
