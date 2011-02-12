@@ -12,7 +12,10 @@
 NS_CLISP_BEGIN
 
 struct expression;
-typedef sp<clisp::expression> expression_t;
+typedef sp<expression> expression_t;
+
+struct environment;
+typedef sp<environment> environment_t;
 
 typedef std::list<expression_t> list;
 
@@ -21,6 +24,7 @@ struct expression {
   virtual double value() const;
   virtual std::string str() const;
   virtual expression_t apply(const list &es) const;
+  virtual expression_t eval(environment_t env) const;
 };
 
 NS_CLISP_END

@@ -1,4 +1,6 @@
 #include "expression.h"
+#include "environment.h"
+
 #include <stdexcept>
 
 clisp::expression::~expression() {}
@@ -13,4 +15,8 @@ std::string clisp::expression::str() const {
 
 clisp::expression_t clisp::expression::apply(const clisp::list &es) const {
   throw std::runtime_error("expression can not be applicable.");
+}
+
+clisp::expression_t clisp::expression::eval(environment_t e) const {
+  throw std::runtime_error("expression can not be evaluatable.");
 }
