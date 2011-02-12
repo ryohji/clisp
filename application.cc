@@ -1,5 +1,6 @@
 #include "application.h"
 #include "number.h"
+#include "list.h"
 
 #include <algorithm>
 #include <sstream>

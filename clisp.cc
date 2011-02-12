@@ -3,6 +3,7 @@
 #include "application.h"
 #include "environment.h"
 #include "symbol.h"
+#include "list.h"
 
 #include <iostream>
 
@@ -12,6 +13,7 @@ int main() {
   es.push_back(new clisp::number(1.0));
   es.push_back(new clisp::number(2.0));
   clisp::expression_t e = clisp::application::add().apply(es);
+  std::cout << es.str() << std::endl;
   std::cout << e->str() << std::endl;
 
   clisp::environment_t env(new clisp::environment);

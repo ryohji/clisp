@@ -17,7 +17,8 @@ typedef sp<expression> expression_t;
 struct environment;
 typedef sp<environment> environment_t;
 
-typedef std::list<expression_t> list;
+struct list;
+typedef sp<list> list_t;
 
 struct expression {
   virtual ~expression();

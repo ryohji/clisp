@@ -1,6 +1,6 @@
 LDFLAGS=-lstdc++
 
-clisp: clisp.o expression.o number.o application.o symbol.o environment.o
+clisp: clisp.o expression.o number.o application.o symbol.o list.o environment.o
 
 .PHONY: clean
 clean:
@@ -12,8 +12,10 @@ expression.o: expression.h
 
 number.o: expression.h number.h
 
-symbol.o: expression.h symbol.h
+symbol.o: expression.h environment.h symbol.h
 
-application.o: expression.h application.h
+list.o: expression.h list.h
+
+application.o: expression.h number.h list.h application.h
 
 environment.o: expression.h environment.h
