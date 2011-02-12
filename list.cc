@@ -22,8 +22,8 @@ std::string list::str() const {
   }
 }
 
-expression_t list::apply(const list &es) const {
-  throw std::runtime_error("list can not be applicable");
+expression_t list::apply(const list_t es) const {
+  throw std::runtime_error("list itself can not be applicable");
 }
 
 namespace {
@@ -34,19 +34,16 @@ namespace {
       es->push_back((*it++)->eval(env));
     return es;
   }
-
-  template<typename T> inline T pop_front(std::list<T> &l)
-  { T value = l.front(); l.pop_front(); return value; }
 }
 
 expression_t list::eval(environment_t env) const {
   if (empty()) {
     throw std::runtime_error("() can not be evaluatable");
   } else {
-    list* es = evaluate(*this, env);
-    expression_t lst(es); // for auto deletion, when poping out this scope
-    expression_t app = clisp::pop_front(*es);
-    return app->apply(*es);
+    list_t es = evaluate(*this, env);
+    expression_t app = es->front();
+    es->pop_front();
+    return app->apply(es);
   }
 }
 

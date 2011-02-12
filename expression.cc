@@ -12,7 +12,7 @@ std::string clisp::expression::str() const {
   return "expression";
 }
 
-clisp::expression_t clisp::expression::apply(const clisp::list &es) const {
+clisp::expression_t clisp::expression::apply(const list_t es) const {
   throw std::runtime_error("expression can not be applicable.");
 }
 

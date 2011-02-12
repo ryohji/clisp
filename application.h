@@ -9,12 +9,12 @@ namespace application {
 
   struct print : public expression {
     virtual std::string str() const;
-    virtual expression_t apply(const list &es) const;
+    virtual expression_t apply(const list_t es) const;
   };
 
   struct add : public expression {
     virtual std::string str() const;
-    virtual expression_t apply(const list &es) const;
+    virtual expression_t apply(const list_t es) const;
   };
 
 }

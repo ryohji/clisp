@@ -24,7 +24,7 @@ struct expression {
   virtual ~expression();
   virtual double value() const;
   virtual std::string str() const;
-  virtual expression_t apply(const list &es) const;
+  virtual expression_t apply(const list_t es) const;
   virtual expression_t eval(environment_t env) const;
 };
 
