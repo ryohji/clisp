@@ -10,6 +10,7 @@ struct number : public expression {
   explicit number(double value) : value_(value) {}
   virtual double value() const { return value_; }
   virtual std::string str() const;
+  virtual expression_t eval(environment_t env) const;
 private:
   double value_;
 };
