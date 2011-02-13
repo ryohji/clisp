@@ -3,7 +3,6 @@
 
 #include "sp.h"
 
-#include <list>
 #include <string>
 
 #define NS_CLISP_BEGIN namespace clisp {
