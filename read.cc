@@ -10,19 +10,17 @@
 NS_CLISP_BEGIN
 
 namespace {
+  expression_t read_aux(std::list<std::string> &ts);
+
   expression_t read_atom(std::list<std::string> &ts) {
     const std::string &token = ts.front();
     if (")" == token) {
       throw std::runtime_error("unexprected end of list ')'");
     } else {
-      if ('-' == token[0]) {
-	return new symbol(token);
-      } else {
-	std::istringstream is(token);
-	double d;
-	is >> d;
-	return is.fail() ? expression_t(new symbol(token)) : new number(d);
-      }
+      std::istringstream is(token);
+      double d;
+      is >> d;
+      return is.fail() ? expression_t(new symbol(token)) : new number(d);
     }
   }
 
@@ -30,7 +28,7 @@ namespace {
     list *l(new list);
     ts.pop_front(); // discard "(".
     while (!ts.empty() && ")" != ts.front()) {
-      l->push_back( "(" == ts.front() ? read_list(ts) : read_atom(ts) );
+      l->push_back(read_aux(ts));
       ts.pop_front();
     }
     if (ts.empty())
