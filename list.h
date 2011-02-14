@@ -11,6 +11,11 @@ struct list : public expression, public std::list<expression_t> {
   virtual std::string str() const;
   virtual expression_t apply(const list_t es) const;
   virtual expression_t eval(environment_t env) const;
+  virtual const list& as_list() const;
+  expression_t car() const;
+  expression_t cdr() const;
+  expression_t cons(expression_t expr) const;
+  bool nil() const;
 };
 
 NS_CLISP_END

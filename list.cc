@@ -47,4 +47,28 @@ expression_t list::eval(environment_t env) const {
   }
 }
 
+const list& list::as_list() const {
+  return *this;
+}
+
+expression_t list::car() const {
+  return front();
+}
+
+expression_t list::cdr() const {
+  list *es = new list(*this); // copy
+  es->pop_front(); // discard head member
+  return es;
+}
+
+expression_t list::cons(expression_t expr) const {
+  list *es = new list(*this); // copy
+  es->push_front(expr);
+  return es;
+}
+
+bool list::nil() const {
+  return empty();
+}
+
 NS_CLISP_END
