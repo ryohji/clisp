@@ -13,13 +13,13 @@ namespace {
   expression_t read_aux(std::list<std::string> &ts);
 
   expression_t read_atom(std::list<std::string> &ts) {
-    const std::string &token = ts.front();
+    const std::string token = ts.front();
+    ts.pop_front();
     if (")" == token) {
       throw std::runtime_error("unexprected end of list ')'");
     } else {
       std::istringstream is(token);
-      double d;
-      is >> d;
+      double d; is >> d;
       return is.fail() ? expression_t(new symbol(token)) : new number(d);
     }
   }
@@ -27,12 +27,8 @@ namespace {
   expression_t read_list(std::list<std::string> &ts) {
     list *l(new list);
     ts.pop_front(); // discard "(".
-    while (!ts.empty() && ")" != ts.front()) {
-      l->push_back(read_aux(ts));
-      ts.pop_front();
-    }
-    if (ts.empty())
-      throw std::runtime_error("incomplete list");
+    while (!ts.empty() && ")" != ts.front()) l->push_back(read_aux(ts));
+    if (ts.empty()) throw std::runtime_error("incomplete list");
     ts.pop_front(); // discard ")".
     return l;
   }

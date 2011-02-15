@@ -1,5 +1,6 @@
 #include "environment.h"
 
+#include <algorithm>
 #include <list>
 #include <stdexcept>
 #include <utility>
@@ -29,8 +30,7 @@ environment::environment(const environment &env) : o (new impl(*env.o)) {}
 
 environment::~environment() { delete o; }
 
-expression_t environment::find(const std::string &symbol) const
-{
+expression_t environment::find(const std::string &symbol) const {
   const impl::const_iterator it = std::find_if(o->begin(), o->end(), finder(symbol));
   if (o->end() == it)
     throw std::runtime_error("symbol not found in the environment");

@@ -17,6 +17,31 @@ namespace application {
     virtual expression_t apply(const list_t es) const;
   };
 
+  struct list_is_list : public expression {
+    virtual std::string str() const;
+    virtual expression_t apply(const list_t es) const;
+  };
+
+  struct list_is_null : public expression {
+    virtual std::string str() const;
+    virtual expression_t apply(const list_t es) const;
+  };
+
+  struct list_car : public expression {
+    virtual std::string str() const;
+    virtual expression_t apply(const list_t es) const;
+  };
+
+  struct list_cdr : public expression {
+    virtual std::string str() const;
+    virtual expression_t apply(const list_t es) const;
+  };
+
+  struct list_cons : public expression {
+    virtual std::string str() const;
+    virtual expression_t apply(const list_t es) const;
+  };
+
 }
 
 NS_CLISP_END

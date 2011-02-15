@@ -1,11 +1,13 @@
 #include "application.h"
 #include "number.h"
 #include "list.h"
+#include "symbol.h"
 
 #include <algorithm>
 #include <sstream>
 #include <numeric>
 #include <iostream>
+#include <stdexcept>
 
 namespace {
   void print_(const clisp::expression_t e) {
@@ -38,4 +40,70 @@ clisp::expression_t clisp::application::add::apply(const list_t es) const {
   list::const_iterator it = es->begin();
   const double init = (*it)->value();
   return new clisp::number(std::accumulate(++it, es->end(), init, accum_));
+}
+
+
+std::string clisp::application::list_is_list::str() const {
+  return "list? :: application";
+}
+
+
+clisp::expression_t clisp::application::list_is_list::apply(const list_t es) const {
+  if (1 != es->size())
+    throw std::runtime_error("passed not just one expression");
+  try {
+    (*es->begin())->as_list();
+    return new symbol("t");
+  } catch (const std::runtime_error&) {
+    return new symbol("f");
+  }
+}
+
+std::string clisp::application::list_is_null::str() const {
+  return "null? :: application";
+}
+
+clisp::expression_t clisp::application::list_is_null::apply(const list_t es) const {
+  if (1 != es->size())
+    throw std::runtime_error("passed not just one expression");
+  return new symbol( (*es->begin())->as_list().nil() ? "t" : "f" );
+}
+
+
+std::string clisp::application::list_car::str() const {
+  return "car :: application";
+}
+
+clisp::expression_t clisp::application::list_car::apply(const list_t es) const {
+  if (1 != es->size())
+    throw std::runtime_error("passed not just one expression");
+  return (*es->begin())->as_list().car();
+}
+
+
+std::string clisp::application::list_cdr::str() const {
+  return "cdr :: application";
+}
+
+clisp::expression_t clisp::application::list_cdr::apply(const list_t es) const {
+  if (1 != es->size())
+    throw std::runtime_error("passed not just one expression");
+  return (*es->begin())->as_list().cdr();
+}
+
+
+std::string clisp::application::list_cons::str() const {
+  return "cons :: application";
+}
+
+clisp::expression_t clisp::application::list_cons::apply(const list_t es) const {
+  if (2 != es->size())
+    throw std::runtime_error("passed not two expression");
+  try {
+    list::const_iterator first = es->begin(), second = first;
+    std::advance(second, 1);
+    return (*second)->as_list().cons(*first);
+  } catch (const std::runtime_error&) {
+    throw std::runtime_error("passed not list expression as 2nd argument");
+  }
 }
