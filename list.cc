@@ -11,7 +11,7 @@ double list::value() const {
 
 std::string list::str() const {
   if (empty()) {
-    return "()";
+    return "nil";
   } else {
     std::ostringstream os;
     const_iterator it = begin();
@@ -38,7 +38,7 @@ namespace {
 
 expression_t list::eval(environment_t env) const {
   if (empty()) {
-    throw std::runtime_error("() can not be evaluatable");
+    return new list;
   } else {
     list_t es = evaluate(*this, env);
     expression_t app = es->front();
@@ -69,6 +69,13 @@ expression_t list::cons(expression_t expr) const {
 
 bool list::nil() const {
   return empty();
+}
+
+
+expression_t quote::eval(environment_t env) const {
+  if (2 != size())
+    throw std::runtime_error("quote does not just 2 expression");
+  return *++begin();
 }
 
 NS_CLISP_END

@@ -37,10 +37,8 @@ expression_t environment::find(const std::string &symbol) const {
   return it->second;
 }
 
-void environment::add(const expression_t &symbol, const expression_t &expr)
-{
+void environment::add(const expression_t &symbol, const expression_t &expr) {
   o->push_front(std::make_pair(symbol, expr));
 }
 
 NS_CLISP_END
-

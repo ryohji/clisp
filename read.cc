@@ -24,9 +24,16 @@ namespace {
     }
   }
 
+  list* create(std::list<std::string> &ts) {
+    if (2 <= ts.size()) {
+      const std::string &token = ts.front();
+      if ("quote" == token) return new quote;
+    }
+    return new list;
+  }
   expression_t read_list(std::list<std::string> &ts) {
-    list *l(new list);
     ts.pop_front(); // discard "(".
+    list *l = create(ts);
     while (!ts.empty() && ")" != ts.front()) l->push_back(read_aux(ts));
     if (ts.empty()) throw std::runtime_error("incomplete list");
     ts.pop_front(); // discard ")".

@@ -104,6 +104,6 @@ clisp::expression_t clisp::application::list_cons::apply(const list_t es) const 
     std::advance(second, 1);
     return (*second)->as_list().cons(*first);
   } catch (const std::runtime_error&) {
-    throw std::runtime_error("passed not list expression as 2nd argument");
+    throw std::runtime_error("passed non-list expression as 2nd argument");
   }
 }

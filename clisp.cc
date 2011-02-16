@@ -18,6 +18,7 @@ int main() {
   env->add(new clisp::symbol("car"), new clisp::application::list_car);
   env->add(new clisp::symbol("cdr"), new clisp::application::list_cdr);
   env->add(new clisp::symbol("cons"), new clisp::application::list_cons);
+  env->add(new clisp::symbol("nil"), new clisp::list);
   env->add(new clisp::symbol("pi"), new clisp::number(3.14));
 
   clisp::list_t es(new clisp::list);
@@ -35,7 +36,7 @@ int main() {
   }
 
   try {
-    std::stringstream input("(cons 2 ())");
+    std::stringstream input("(cons 1 (cons 2 ()))");
     std::cout << clisp::read(input)->eval(env)->str() << std::endl;
   } catch (std::exception &e) {
     std::cerr << e.what() << std::endl;
