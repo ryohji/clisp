@@ -13,7 +13,7 @@ std::string clisp::expression::str() const {
 }
 
 clisp::expression_t clisp::expression::apply(const list_t es) const {
-  throw std::runtime_error("expression can not be applicable.");
+  throw std::runtime_error("expression " + str() + " can not be applicable.");
 }
 
 clisp::expression_t clisp::expression::eval(environment_t e) const {

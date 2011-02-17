@@ -4,10 +4,11 @@
 #include <list>
 #include <stdexcept>
 #include <utility>
+#include <string>
 
 NS_CLISP_BEGIN
 
-typedef std::pair<expression_t, expression_t> pair_t;
+typedef std::pair<std::string, expression_t> pair_t;
 
 struct environment::impl : std::list<pair_t> {};
 
@@ -15,7 +16,7 @@ namespace {
   struct finder {
     explicit finder(const std::string& expr) : symbol(expr) {}
     bool operator() (const pair_t &pair) const {
-      return symbol == pair.first->str();
+      return symbol == pair.first;
     }
   private:
     finder& operator= (const finder&);
@@ -38,7 +39,8 @@ expression_t environment::find(const std::string &symbol) const {
 }
 
 void environment::add(const expression_t &symbol, const expression_t &expr) {
-  o->push_front(std::make_pair(symbol, expr));
+  // TODO: need to check 1st argument type
+  o->push_front(std::make_pair(symbol->str(), expr));
 }
 
 NS_CLISP_END

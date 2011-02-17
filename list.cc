@@ -78,4 +78,14 @@ expression_t quote::eval(environment_t env) const {
   return *++begin();
 }
 
+
+expression_t define::eval(environment_t env) const {
+  if (3 != size())
+    throw std::runtime_error("define doesn't passed just 3 expressions");
+  const_iterator symbol = ++begin();
+  const_iterator expr = ++ (++begin());
+  env->add(*symbol, (*expr)->eval(env));
+  return 0;
+}
+
 NS_CLISP_END
