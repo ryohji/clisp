@@ -88,4 +88,34 @@ expression_t define::eval(environment_t env) const {
   return 0;
 }
 
+namespace {
+  struct lambda_ : public expression {
+    virtual std::string str() const { return "lambda"; }
+    virtual expression_t apply(const list_t es) const {
+      const list &as = es->as_list(), &vs = vars->as_list();
+      if (as.size() != vs.size())
+	throw std::runtime_error("lambda argument length mismatch");
+      return body->eval(zip_on(env.operator->(), vs, as));
+    }
+    lambda_(expression_t vars, expression_t body, environment_t env)
+      : vars(vars), body(body), env(new environment(*env.operator->())) {}
+  private:
+    environment_t zip_on(const environment *e, const list &vs, const list &as) const {
+      list::const_iterator it_v = vs.begin(), it_a = as.begin();
+      environment_t Env(new environment(*e));
+      while (vs.end() != it_v) Env->add(*it_v++, *it_a++);
+      return Env;
+    }
+    expression_t vars;
+    expression_t body;
+    environment_t env;
+  };
+}
+
+expression_t lambda::eval(environment_t env) const {
+  if (3 != size())
+    throw std::runtime_error("lambda doesn't passed just 2 arguments");
+  return new lambda_(*++begin(), *++++begin(), env);
+}
+
 NS_CLISP_END

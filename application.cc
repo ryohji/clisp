@@ -54,6 +54,7 @@ clisp::expression_t clisp::application::list_make::apply(const list_t es) const 
     std::string s = (*es->begin())->str();
     if ("quote" == s) l = new quote;
     if ("define" == s) l = new define;
+    if ("lambda" == s) l = new lambda;
   }
   if (!l) l = new list;
   list::const_iterator it = es->begin();

@@ -51,6 +51,13 @@ int main() {
   } catch (std::exception &e) {
     std::cerr << e.what() << std::endl;
   }
+
+  try {
+    std::istringstream input("((lambda (x) (+ x x 1)) 2)");
+    std::cout << clisp::read(input)->eval(env)->str() << std::endl;
+  } catch (std::exception &e) {
+    std::cerr << e.what() << std::endl;
+  }
     
   return 0;
 }

@@ -26,6 +26,10 @@ struct define : public list {
   virtual expression_t eval(environment_t env) const;
 };
 
+struct lambda : public list {
+  virtual expression_t eval(environment_t env) const;
+};
+
 NS_CLISP_END
 
 #endif /* LIST_H_ */

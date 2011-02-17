@@ -28,6 +28,7 @@ namespace {
       const std::string &token = ts.front();
       if ("quote" == token) return new quote;
       if ("define" == token) return new define;
+      if ("lambda" == token) return new lambda;
     }
     return new list;
   }
