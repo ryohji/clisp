@@ -17,7 +17,7 @@ namespace application {
     virtual expression_t apply(const list_t es) const;
   };
 
-  struct list_is_list : public expression {
+  struct list_make : public expression {
     virtual std::string str() const;
     virtual expression_t apply(const list_t es) const;
   };

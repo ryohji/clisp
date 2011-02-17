@@ -43,20 +43,21 @@ clisp::expression_t clisp::application::add::apply(const list_t es) const {
 }
 
 
-std::string clisp::application::list_is_list::str() const {
-  return "list? :: application";
+std::string clisp::application::list_make::str() const {
+  return "list :: application";
 }
 
 
-clisp::expression_t clisp::application::list_is_list::apply(const list_t es) const {
-  if (1 != es->size())
-    throw std::runtime_error("passed not just one expression");
-  try {
-    (*es->begin())->as_list();
-    return new symbol("t");
-  } catch (const std::runtime_error&) {
-    return new symbol("f");
+clisp::expression_t clisp::application::list_make::apply(const list_t es) const {
+  list *l = 0;
+  if (0 < es->size()) {
+    std::string s = (*es->begin())->str();
+    if ("quote" == s) l = new quote;
   }
+  if (!l) l = new list;
+  list::const_iterator it = es->begin();
+  while (es->end() != it) l->push_back(*it++);
+  return l;
 }
 
 std::string clisp::application::list_is_null::str() const {

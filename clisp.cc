@@ -13,7 +13,7 @@
 int main() {
   clisp::environment_t env(new clisp::environment);
   env->add(new clisp::symbol("+"), new clisp::application::add);
-  env->add(new clisp::symbol("list?"), new clisp::application::list_is_list);
+  env->add(new clisp::symbol("list"), new clisp::application::list_make);
   env->add(new clisp::symbol("null?"), new clisp::application::list_is_null);
   env->add(new clisp::symbol("car"), new clisp::application::list_car);
   env->add(new clisp::symbol("cdr"), new clisp::application::list_cdr);
@@ -37,6 +37,13 @@ int main() {
 
   try {
     std::stringstream input("(cons 1 (cons 2 ()))");
+    std::cout << clisp::read(input)->eval(env)->str() << std::endl;
+  } catch (std::exception &e) {
+    std::cerr << e.what() << std::endl;
+  }
+
+  try {
+    std::stringstream input("(list (quote list) 1 2 3)");
     std::cout << clisp::read(input)->eval(env)->str() << std::endl;
   } catch (std::exception &e) {
     std::cerr << e.what() << std::endl;
