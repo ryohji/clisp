@@ -42,10 +42,10 @@ int main() {
   }
 
   try {
-    std::istringstream input("(define pi 3.14)");
+    std::istringstream input("(define plus +)");
     clisp::read(input)->eval(env);
     {
-      std::istringstream input("pi");
+      std::istringstream input("(plus 1 3 5 7)");
       std::cout << clisp::read(input)->eval(env)->str() << std::endl;
     }
   } catch (std::exception &e) {
