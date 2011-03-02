@@ -3,30 +3,43 @@
 
 template <typename TYPE>
 struct sp {
-  sp(TYPE *o = 0) : c(new unsigned(1)), o(o) {}
-  sp(const sp<TYPE>& u) : c(u.c), o(u.o) { ++*c; }
+  sp(TYPE *o = 0);
+  sp(const sp<TYPE>& u);
   ~sp() { detach(); }
   sp<TYPE>& operator=(const sp<TYPE>& u);
-  const TYPE* operator->() const { return o; }
   TYPE* operator->();
+  const TYPE* operator->() const { return o; }
 private:
   void detach();
-  unsigned *c;
   TYPE *o;
 };
 
+namespace sp_detail {
+  unsigned ref_up(void *);
+  unsigned ref_down(void *);
+}
+
+template<typename TYPE>
+inline sp<TYPE>::sp(TYPE *o) : o(o) {
+  sp_detail::ref_up(o);
+}
+
+template<typename TYPE>
+inline sp<TYPE>::sp(const sp<TYPE>& u) : o(u.o) {
+  sp_detail::ref_up(o);
+}
+
+
 template<typename TYPE>
 inline sp<TYPE>& sp<TYPE>::operator=(const sp<TYPE>& u) {
-  ++*u.c;
+  sp_detail::ref_up(u.o);
   detach();
   o = u.o;
-  c = u.c;
 }
 
 template<typename TYPE>
 inline void sp<TYPE>::detach() {
-  if (0 == --*c) {
-    delete c;
+  if (0 == sp_detail::ref_down(o)) {
     delete o;
   }
 }
